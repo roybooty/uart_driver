@@ -1,0 +1,4 @@
+src/main.s
+firmware.bin
+firmware.elf
+firmware.elf.map
