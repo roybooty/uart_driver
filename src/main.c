@@ -1,8 +1,7 @@
 #include <stdint.h>
 
 #define RCC_APB2ENR (*(volatile uint32_t*)(0x40021000+0x18))
-#define USART_SR_TXE (1U << 7)
-#define USART_SR_RXNE (1u << 5)
+#define BIT(X) (1u << (X))
 #define NVIC (*(volatile uint32_t*)(0xe000e100))
 #define NVIC_ISER1 (*((volatile unsigned long *)0xe000e104))
 #define NVIC_ICPR1       (*((volatile unsigned int *)0xE000E284))
@@ -19,7 +18,7 @@ struct gpio {
 #define USART1 ((struct usart*)0x40013800)
 
 void USART1_putc(char c){
-    while(!(USART1->SR & USART_SR_TXE));
+    while(!(USART1->SR & BIT(7)));
     USART1->DR = 0x000000ff&c;
 }
 
@@ -31,7 +30,7 @@ void USART1_puts(const char *ch) {
 }
 
 void USART1_IRQHandler(void) {
-    if(USART1->SR & USART_SR_RXNE){
+    if(USART1->SR & BIT(5)){
         USART1_putc(USART1->DR & 0xff);
     }
 }
